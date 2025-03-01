@@ -1,4 +1,5 @@
 import datetime
+from blood import send_otp
 import pymongo
 import hashlib
 import random
@@ -6,6 +7,8 @@ import smtplib
 from bson.objectid import ObjectId
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.message import EmailMessage
+from twilio.rest import Client
 
 # Connect to MongoDB
 client = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -32,36 +35,150 @@ def log_activity(username, action):
         "timestamp": datetime.datetime.now()
     })
 
-SENDER_EMAIL = "your_email@gmail.com"
-APP_PASSWORD = "your_app_password"
+TWILIO_ACCOUNT_SID = "your_twilio_account_sid"
+TWILIO_AUTH_TOKEN = "your_twilio_auth_token"
+TWILIO_PHONE_NUMBER = "+your_twilio_number"
+GMAIL_USER = "your_email@gmail.com"
+GMAIL_PASSWORD = "your_gmail_app_password"
 
-def send_otp(email):
-    otp = str(random.randint(100000, 999999))  # Generate random 6-digit OTP
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["blood_donation"]
+users_collection = db["users"]
+otp_collection = db["otp"]
 
-    subject = "Your Blood Donation System OTP"
-    message = f"Your OTP for verification is: {otp}"
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
-    msg = MIMEMultipart()
-    msg["From"] = SENDER_EMAIL
+# Function to generate OTP
+def generate_otp():
+    return str(random.randint(100000, 999999))
+
+# Function to send OTP via email
+def send_otp_email(email, otp):
+    msg = EmailMessage()
+    msg["Subject"] = "Your OTP for Verification"
+    msg["From"] = GMAIL_USER
     msg["To"] = email
-    msg["Subject"] = subject
-    msg.attach(MIMEText(message, "plain"))
+    msg.set_content(f"Your OTP is: {otp}\nThis OTP is valid for 5 minutes.")
 
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(SENDER_EMAIL, APP_PASSWORD)
-        server.sendmail(SENDER_EMAIL, email, msg.as_string())
-        server.quit()
-        
-        # Save OTP in MongoDB
-        otp_collection.insert_one({"email": email, "otp": otp})
-        print(f"✅ OTP Sent to {email}: {otp}")
-        return otp
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(GMAIL_USER, GMAIL_PASSWORD)
+            server.send_message(msg)
+        print(f"✅ OTP sent to {email} successfully!")
     except Exception as e:
-        print(f"❌ Failed to send OTP: {e}")
-        return None
-      
+        print(f"❌ Failed to send email OTP: {e}")
+
+def send_otp_phone(phone, otp):
+    try:
+        client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        message = client.messages.create(
+            body=f"Your OTP is: {otp}\nValid for 5 minutes.",
+            from_=TWILIO_PHONE_NUMBER,
+            to=phone
+        )
+        print(f"✅ OTP sent to {phone} successfully!")
+    except Exception as e:
+        print(f"❌ Failed to send SMS OTP: {e}")
+
+def store_otp(email, phone, otp):
+    hashed_otp = hashlib.sha256(otp.encode()).hexdigest()
+    otp_collection.insert_one({
+        "email": email,
+        "phone": phone,
+        "otp": hashed_otp,
+        "timestamp": datetime.datetime.now()
+    })
+
+def validate_otp(email, phone, user_otp):
+    hashed_otp = hashlib.sha256(user_otp.encode()).hexdigest()
+    otp_data = otp_collection.find_one({"email": email, "phone": phone, "otp": hashed_otp})
+
+    if otp_data:
+        time_diff = datetime.datetime.now() - otp_data["timestamp"]
+        if time_diff.total_seconds() <= 300:  # 5-minute expiration
+            print("✅ OTP Verified Successfully!")
+            otp_collection.delete_one({"email": email, "phone": phone})  # Remove OTP after successful verification
+            return True
+        else:
+            print("❌ OTP Expired! Request a new one.")
+    else:
+        print("❌ Invalid OTP! Try again.")
+
+    return False
+
+    def register_user():
+        username = input("Enter Username: ")
+        email = input("Enter Email: ")
+        phone = input("Enter Phone Number: ")
+        password = input("Enter Password: ")
+
+        otp = generate_otp()
+        send_otp_email(email, otp)
+        send_otp_phone(phone, otp)
+        store_otp(email, phone, otp)
+
+    user_otp = input("Enter the OTP sent to your Email and Phone: ")
+
+    if validate_otp(email, phone, user_otp):
+        hashed_password = hash_password(password)
+        user_id = "USR" + str(ObjectId())[:6]
+
+        users_collection.insert_one({
+            "id": user_id,
+            "username": username,
+            "email": email,
+            "phone": phone,
+            "password": hashed_password
+        })
+
+        print(f"🎉 Registration Successful! Your User ID: {user_id}")
+    else:
+        print("❌ Registration Failed due to OTP mismatch.")
+
+# Function to login with OTP verification
+def login_user():
+    email = input("Enter Email: ")
+    phone = input("Enter Phone Number: ")
+    user = users_collection.find_one({"email": email, "phone": phone})
+
+    if not user:
+        print("❌ User not found! Register first.")
+        return
+
+    otp = generate_otp()
+    send_otp_email(email, otp)
+    send_otp_phone(phone, otp)
+    store_otp(email, phone, otp)
+
+    user_otp = input("Enter the OTP sent to your Email and Phone: ")
+
+    if validate_otp(email, phone, user_otp):
+        print(f"✅ Login Successful! Welcome, {user['username']}!")
+    else:
+        print("❌ Login Failed due to incorrect OTP.")
+
+# Main menu
+def main():
+    while True:
+        print("\n🔴 Blood Donation System")
+        print("1. Register User (OTP Verification)")
+        print("2. Login (OTP Verification)")
+        print("3. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            register_user()
+        elif choice == "2":
+            login_user()
+        elif choice == "3":
+            print("Exiting...")
+            break
+        else:
+            print("❌ Invalid choice! Try again.")
+
+  
 # Register a new user
 def register_user():
     username = input("Enter Username: ")
