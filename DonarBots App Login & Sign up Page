@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> DONOR BOTS </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #8B0000, #4B0000);
+            overflow: hidden;
+            position: relative;
+        }
+        .blood-drop {
+            width: 12px;
+            height: 18px;
+            background: radial-gradient(circle at 50% 100%, #8B0000, #4B0000);
+            border-radius: 50% 50% 50% 50%;
+            position: absolute;
+            top: -20px;
+            filter: drop-shadow(0 0 5px rgba(139, 0, 0, 0.8));
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) scale(1.2);
+                opacity: 0.9;
+            }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 10;
+            animation: popIn 0.6s ease-out;
+        }
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: #8B0000;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #555;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .tab-button:hover {
+            color: #8B0000;
+            transform: scale(1.1);
+        }
+        .tab-button.active {
+            color: #8B0000;
+            border-bottom: 3px solid #8B0000;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus {
+            border-color: #8B0000;
+            outline: none;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: #8B0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .submit-button:hover {
+            background: #4B0000;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to Donorbots</h2>
+        <div class="tabs">
+            <button class="tab-button active" onclick="showForm('login')">Login</button>
+            <button class="tab-button" onclick="showForm('signup')">Sign Up</button>
+        </div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Email address</label>
+                <input type="email" id="login-email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="submit-button">Login</button>
+        </form>
+        <form id="signup-form" class="hidden">
+            <div class="form-group">
+                <label for="signup-email">Email address</label>
+                <input type="email" id="signup-email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-password">Password</label>
+                <input type="password" id="signup-password" placeholder="Create a password" required>
+            </div>
+            <div class="form-group">
+                <label for="signup-confirm-password">Confirm Password</label>
+                <input type="password" id="signup-confirm-password" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" class="submit-button">Sign Up</button>
+        </form>
+    </div>
+    <script>
+        function showForm(form) {
+            document.getElementById('login-form').classList.toggle('hidden', form !== 'login');
+            document.getElementById('signup-form').classList.toggle('hidden', form !== 'signup');
+            document.querySelector('.tab-button.active').classList.remove('active');
+            document.querySelector([onclick="showForm('${form}')"]).classList.add('active');
+        }
+
+        function createBloodDrops() {
+            const numDrops = 50;
+            for (let i = 0; i < numDrops; i++) {
+                let drop = document.createElement('div');
+                drop.classList.add('blood-drop');
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = (Math.random() * 4 + 2) + 's';
+                drop.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(drop);
+            }
+        }
+        createBloodDrops();
+    </script>
+</body>
+</html>
