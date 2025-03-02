@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Platform</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            background-color: #8B0000;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            width: 100%;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .box-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .box {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-weight: bold;
+            color: #8B0000;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .box:hover {
+            background-color: #f0e0e0;
+        }
+
+        .details-section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .details-section h3 {
+            color: #8B0000;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #8B0000;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #a00000;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Welcome to Blood Donation Platform
+    </div>
+
+    <div class="section">
+        <h2>Home Page</h2>
+        <div class="box-container">
+            <div class="box" onclick="donorFunction()">Donor</div>
+            <div class="box" onclick="requestFunction()">Request</div>
+            <div class="box" onclick="searchFunction()">Search</div>
+            <div class="box" onclick="settingsFunction()">Settings</div>
+        </div>
+    </div>
+
+    <!-- Donor Form Section -->
+    <div id="donor-details" class="details-section">
+        <h3>Donor Registration Form</h3>
+        <form>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+            <div class="form-group">
+                <label for="blood-group">Blood Group:</label>
+                <select id="blood-group" name="blood-group" required>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Request Form Section -->
+    <div id="request-details" class="details-section">
+        <h3>Blood Request Form</h3>
+        <form>
+            <div class="form-group">
+                <label for="patient-name">Patient Name:</label>
+                <input type="text" id="patient-name" name="patient-name" required>
+            </div>
+          <div class="form-group">
+                <label for="blood units (1 to 5)">blood units (1 to 5):</label>
+                <input type="number" id="blood units (1 to 5)" name="blood units (1 to 5)" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+          <div class="form-group">
+                <label for="phone number">phone number:</label>
+                <input type="number" id="phone number" name="phone number" required>
+            </div>
+          <div class="form-group">
+                <label for="email id">email id:</label>
+                <input type="alphanumeric" id="email id" name="email id" required>
+            </div>
+          <div class="form-group">
+                <label for="location">location:</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+            <div class="form-group">
+                <label for="blood-group">Blood Group:</label>
+                <select id="blood-group" name="blood-group" required>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function hideAllSections() {
+            document.querySelectorAll('.details-section').forEach(section => section.style.display = 'none');
+        }
+
+        function donorFunction() {
+            hideAllSections();
+            document.getElementById('donor-details').style.display = 'block';
+        }
+
+        function requestFunction() {
+            hideAllSections();
+            document.getElementById('request-details').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
