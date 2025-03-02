@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Button</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        .bar {
+            display: block;
+            width: 30px;
+            height: 4px;
+            margin: 5px auto;
+            background-color: black;
+            transition: 0.3s;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            width: 150px;
+            padding: 10px;
+        }
+
+        .menu a {
+            display: block;
+            text-decoration: none;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .menu a:hover {
+            background: #ddd;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <div class="menu" id="menu">
+            <a href="#">Home</a>
+            <a href="#">Settings</a>
+            <a href="#">Profile</a>
+            <a href="#">Logout</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("menu").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.menu-container')) {
+                document.getElementById("menu").classList.remove("show");
+            }
+        }
+    </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Platform</title>
+    <style>
+        
+
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            background-color: #8B0000;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            width: 100%;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 800px;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .box-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .box {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-weight: bold;
+            color: #8B0000;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .box:hover {
+            background-color: #f0e0e0;
+        }
+
+        .details-section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .details-section h3 {
+            color: #8B0000;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #8B0000;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #a00000;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Welcome to Blood Donation Platform
+    </div>
+
+    <div class="section">
+        <h2>Home Page</h2>
+        <div class="box-container">
+            <div class="box" onclick="donorFunction()">Donor</div>
+            <div class="box" onclick="requestFunction()">Request</div>
+            <div class="box" onclick="searchFunction()">Search</div>
+            <div class="box" onclick="settingsFunction()">Settings</div>
+        </div>
+    </div>
+
+    <!-- Donor Form Section -->
+    <div id="donor-details" class="details-section">
+        <h3>Donor Registration Form</h3>
+        <form>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+          
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+          <div class="form-group">
+                <label for="location">location:</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+          <div class="form-group">
+                <label for="email id">email id:</label>
+                <input type="alphanumeric" id="email id" name="email id" required>
+            </div>
+            <div class="form-group">
+                <label for="blood-group">Blood Group:</label>
+                <select id="blood-group" name="blood-group" required>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+          <div class="form-group">
+                <label for="any diseases (yes or no)">any diseases (yes or no):</label>
+                <input type="text" id="any diseases (yes or no)" name="any diseases (yes or no)" required>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+   <!-- request Form Section -->
+    <div id="request-details" class="details-section">
+        <h3>resquest Registration Form</h3>
+        <form>
+            <div class="form-group">
+                <label for="patient name">patient name:</label>
+                <input type="text" id=" patient name" name="patient name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="phone number">Phone Number:</label>
+                <input type="number" id="phone number" name="phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="blood-group">Blood Group:</label>
+                <select id="blood-group" name="blood-group" required>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="blood units (1 to 5)">blood units (1 to 5):</label>
+                <input type="number" i="blood units (1 to 5)" name="blood units (1 to 5)" required>
+            </div>
+          <div class="form-group">
+                <label for="location">location:</label>
+                <input type="text" id=" location" name="location" required>
+            </div>
+          <div class="form-group">
+                <label for="email id">email id:</label>
+                <input type="alpha numeric" id=" email id" name="email id" required>
+            </div>
+          
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Search Form Section -->
+    <div id="search-details" class="details-section">
+        <h3>Search for Blood Donors</h3>
+        <form>
+            <div class="form-group">
+                <label for="blood-group-search">Select Blood Group:</label>
+                <select id="blood-group-search" name="blood-group" required>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="blood marker">blood marker:</label>
+                <input type="text" id="blood marker" name="blood marker" required>
+            </div>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+  <!-- settings Form Section -->
+    <div id="setting-details" class="details-section">
+        <h3>settings </h3>
+        <form>
+            <div class="form-group">
+                <label for="profile management">profile management:</label>
+                <input type="text" id="profile management" name="profile management" required>
+            </div>
+          <div class="form-group">
+                <label for="Notifications">Notifications:</label>
+                <input type="text" id="Notifications" name="Notifications" required>
+            </div>
+          <div class="form-group">
+                <label for="location setting">location setting:</label>
+                <input type="text" id="location setting" name="location setting" required>
+            </div>
+          <div class="form-group">
+                <label for="privacy and security">privacy and security:</label>
+                <input type="text" id="privacy and security" name="privacy and security" required>
+            </div>
+          <div class="form-group">
+                <label for="languages">languages:</label>
+                <input type="text" id="languages" name="languages" required>
+            </div>
+          <div class="form-group">
+                <label for="help and support">help and support:</label>
+                <input type="text" id="help and support" name="help and support" required>
+            </div>
+
+    <script>
+        function hideAllSections() {
+            document.querySelectorAll('.details-section').forEach(section => section.style.display = 'none');
+        }
+
+        function donorFunction() {
+            hideAllSections();
+            document.getElementById('donor-details').style.display = 'block';
+        }
+
+        function searchFunction() {
+            hideAllSections();
+            document.getElementById('search-details').style.display = 'block';
+        }
+        function requestFunction() {
+            hideAllSections();
+            document.getElementById('request-details').style.display = 'block';
+        }
+
+        function settingsFunction() {
+            hideAllSections();
+           document.getElementById('setting-details').style.display = 'block'
+        }
+    </script>
+</body>
+</html>
